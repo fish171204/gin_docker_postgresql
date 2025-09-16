@@ -9,3 +9,5 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-master-golang}
       POSTGRES_USER: ${POSTGRES_USER:-root}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "54332:5432"
