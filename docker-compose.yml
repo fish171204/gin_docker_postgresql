@@ -4,4 +4,8 @@ services:
   db:
     image: postgres:17.6-alpine3.22
     container_name: postgres-db
-    restrartA: unless-stopped
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-master-golang}
+      POSTGRES_USER: ${POSTGRES_USER:-root}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
