@@ -5,9 +5,12 @@ export-db:
     docker exec -i postgres-db pg_dump -U root -d master-golang > ./backupdb-master-golang.sql
 	#			   (db_name)			(username) (file name)
 
-
+// Migrate commands
 migrate create -ext sql -dir internal/db/migrations -seq users
 	#			   (file ex)	   				             (dir name)	   (from file name) 
 
 migrate -path internal/db/migrations -database "postgresql://root:khoa@123456@localhost:5433/master-golang?sslmode=disable" up
+	#			   (dir name)	   (db connection string)	(username:password)						(command)
+
+migrate -path internal/db/migrations -database "postgresql://root:khoa@123456@localhost:5433/master-golang?sslmode=disable" down 1
 	#			   (dir name)	   (db connection string)	(username:password)						(command)
