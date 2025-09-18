@@ -28,3 +28,9 @@ migrate-up:
 # Rollback the last migration
 migrate-down:
 	migrate -path $(MIGRATION_DIRS) -database "$(CONN_STRING)" down 1
+
+# Force migration version (use with caution example: make migrate-force VERSION=1) 
+migrate-force:
+	migrate -path $(MIGRATION_DIRS) -database "$(CONN_STRING)" force $(VERSION)
+
+.PHONY: importdb exportdb server migrate-create migrate-up migrate-down migrate-force migrate-drop migrate-goto migrate-down-n
