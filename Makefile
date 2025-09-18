@@ -8,3 +8,6 @@ export-db:
 
 migrate create -ext sql -dir internal/db/migrations -seq users
 	#			   (file ex)	   				             (dir name)	   (from file name) 
+
+migrate -path internal/db/migrations -database "postgresql://root:khoa@123456@localhost:5433/master-golang?sslmode=disable" up
+	#			   (dir name)	   (db connection string)	(username:password)						(command)
