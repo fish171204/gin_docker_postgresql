@@ -1,16 +1,30 @@
-import-db: 
-    Get-Content ./backupdb-master-golang.sql | docker exec -i postgres-db psql -U root -d master-golang
-	#		          (file ex)	   				             (db_name)	   (username) (from file name)
-export-db: 
-    docker exec -i postgres-db pg_dump -U root -d master-golang > ./backupdb-master-golang.sql
-	#			   (db_name)			(username) (file name)
+include .env
+export
 
-// Migrate commands
-migrate create -ext sql -dir internal/db/migrations -seq users
-	#			   (file ex)	   				             (dir name)	   (from file name) 
+CONN_STRING = postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=$(DB_SSLMODE)
 
-migrate -path internal/db/migrations -database "postgresql://root:khoa@123456@localhost:5433/master-golang?sslmode=disable" up
-	#			   (dir name)	   (db connection string)	(username:password)						(command)
+MIGRATION_DIRS = internal/db/migrations
 
-migrate -path internal/db/migrations -database "postgresql://root:khoa@123456@localhost:5433/master-golang?sslmode=disable" down 1
-	#			   (dir name)	   (db connection string)	(username:password)						(command)
+# Import database
+importdb:
+	docker exec -i postgres-db psql -U root -d master-golang < ./backupdb-master-golang.sql
+
+# Export database
+exportdb:
+	docker exec -i postgres-db pg_dump -U root -d master-golang > ./backupdb-master-golang.sql
+
+# Run server
+server:
+	go run .
+
+# Create a new migration (make migrate-create NAME=profiles)
+migrate-create:
+	migrate create -ext sql -dir $(MIGRATION_DIRS) -seq $(NAME)
+
+# Run all pending migration (make migrate-up)
+migrate-up:
+	migrate -path $(MIGRATION_DIRS) -database "$(CONN_STRING)" up
+
+# Rollback the last migration
+migrate-down:
+	migrate -path $(MIGRATION_DIRS) -database "$(CONN_STRING)" down 1
