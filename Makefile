@@ -25,9 +25,17 @@ migrate-create:
 migrate-up:
 	migrate -path $(MIGRATION_DIRS) -database "$(CONN_STRING)" up
 
+# Apply specific migration version (make migrate-goto VERSION=1)
+migrate-goto:
+	migrate -path $(MIGRATION_DIRS) -database "$(CONN_STRING)" goto $(VERSION)
+	
 # Rollback the last migration
 migrate-down:
 	migrate -path $(MIGRATION_DIRS) -database "$(CONN_STRING)" down 1
+
+# Rollback N migrations
+migrate-down-n:
+	migrate -path $(MIGRATION_DIRS) -database "$(CONN_STRING)" down $(N)
 
 # Force migration version (use with caution example: make migrate-force VERSION=1) 
 migrate-force:
