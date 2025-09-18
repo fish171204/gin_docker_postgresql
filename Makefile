@@ -33,4 +33,8 @@ migrate-down:
 migrate-force:
 	migrate -path $(MIGRATION_DIRS) -database "$(CONN_STRING)" force $(VERSION)
 
+# Drop everything (include schema migration)
+migrate-drop:
+	migrate -path $(MIGRATION_DIRS) -database "$(CONN_STRING)" drop
+
 .PHONY: importdb exportdb server migrate-create migrate-up migrate-down migrate-force migrate-drop migrate-goto migrate-down-n
