@@ -37,4 +37,8 @@ migrate-force:
 migrate-drop:
 	migrate -path $(MIGRATION_DIRS) -database "$(CONN_STRING)" drop
 
+# Apply specific migration version (make migrate-goto VERSION=1)
+migrate-goto:
+	migrate -path $(MIGRATION_DIRS) -database "$(CONN_STRING)" goto $(VERSION)
+
 .PHONY: importdb exportdb server migrate-create migrate-up migrate-down migrate-force migrate-drop migrate-goto migrate-down-n
